@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Home, HomeIcon, Building, AlignJustify, AlertCircle, Zap } from "lucide-react"
 import type { Question } from "@/lib/questions-config"
 import type { Answer } from "./solar-funnel"
+import { fetchPlzList } from "@/lib/plz-util"
+import { useEffect, useState } from "react"
 
 const iconMap = {
   home: Home,
@@ -23,6 +25,26 @@ interface QuestionStepProps {
 }
 
 export function QuestionStep({ question, answer, onAnswer }: QuestionStepProps) {
+  // PLZ-Validierung
+  const [plzList, setPlzList] = useState<string[] | null>(null)
+  const [plzError, setPlzError] = useState<string>("")
+
+  useEffect(() => {
+    if (question.id === "plz" && plzList === null) {
+      fetchPlzList().then(setPlzList).catch(() => setPlzList([]))
+    }
+  }, [question.id, plzList])
+
+  useEffect(() => {
+    if (question.id === "plz" && answer?.value && plzList) {
+      if (!plzList.includes(answer.value as string)) {
+        setPlzError("Die eingegebene PLZ ist nicht im Servicegebiet.")
+      } else {
+        setPlzError("")
+      }
+    }
+  }, [question.id, answer?.value, plzList])
+
   const handleSliderChange = (values: number[]) => {
     onAnswer(question.id, values[0])
   }
@@ -199,7 +221,12 @@ export function QuestionStep({ question, answer, onAnswer }: QuestionStepProps) 
             maxLength={question.id === "plz" ? 5 : undefined}
           />
           {question.id === "plz" && (
-            <p className="text-sm text-gray-500 text-center">Bitte geben Sie eine 5-stellige Postleitzahl ein</p>
+            <>
+              <p className="text-sm text-gray-500 text-center">Bitte geben Sie eine 5-stellige Postleitzahl ein</p>
+              {plzError && (
+                <p className="text-sm text-red-600 text-center font-semibold">{plzError}</p>
+              )}
+            </>
           )}
         </div>
       )}

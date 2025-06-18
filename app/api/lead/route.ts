@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     console.log("Received detailed lead data:", data)
 
     // Your Make.com webhook URL for detailed leads
-    const webhookUrl = "https://hook.eu2.make.com/az9qe07qy6if3nltru41ft2opyvqa5mf"
+    const webhookUrl = "https://hook.eu2.make.com/u4ww60ufqp6hreumavbx248ej1njkn9s"
 
     const response = await fetch(webhookUrl, {
       method: "POST",
