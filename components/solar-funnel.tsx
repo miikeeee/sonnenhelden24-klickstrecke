@@ -132,7 +132,7 @@ export function SolarFunnel() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sun className="h-8 w-8 text-black" />
             <CardTitle className="text-2xl font-bold text-gray-800">
-              <span style={{ color: "#FFFD53" }}>Sonnen</span>Helden24 Solar Check
+              <span style={{ background: "#FFFD53", color: "#222", borderRadius: 4, padding: "0 6px" }}>Sonnen</span>Helden24 Solar Check
             </CardTitle>
           </div>
           <Progress value={progress} className="w-full h-2" />
